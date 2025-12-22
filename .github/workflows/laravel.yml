@@ -38,4 +38,8 @@ jobs:
         NODE_OPTIONS: --openssl-legacy-provider
       run: npm i ; npm run dev
     - name: curl -i localhost:3001
-      run: npx http-server ; curl -i localhost:3001
+      run: |
+        npx http-server -p 3001 -c-1 & npx_server=$!  # Start in background, capture PID
+        sleep 5  # Wait for startup
+        curl -i localhost:3001
+        kill $npx_server  # Cleanup
