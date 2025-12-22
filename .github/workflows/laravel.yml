@@ -43,18 +43,12 @@ jobs:
     - name: curl -i localhost:3001
       run: |
         npx http-server -p 3001 -c-1 & npx_server=$!  # Start in background, capture PID
-    - name: Run SOOS DAST Analysis
-      uses: soos-io/soos-dast-github-action@a7eb40b94c1c81eb76b178ba1befdc21823f86fa
-      with:
-        client_id: ${{ secrets.SOOS_CLIENT_ID }}
-        api_key: ${{ secrets.SOOS_API_KEY }}
-        project_name: "test run"
-        scan_mode: "baseline"
-        target_url: "--url=http://127.0.0.1:3001"
-        export_format: "Sarif"
-        export_file_type: "Json"
-    - name: Find and rename SARIF file since it is unique
+    - name: Run SOOS DAST Analysis + Find and rename SARIF file since it is unique
       run: |
+        docker pull soosio/dast:a7eb40b94c1c81eb76b178ba1befdc21823f86fa
+        chmod -R 777 ${{ github.workspace }}
+        eval "docker -p3001:3001 run -u zap -v ${{ github.workspace }}:/zap/wrk/:rw --rm soosio/dast:a7eb40b94c1c81eb76b178ba1befdc21823f86fa --integrationName=Github --integrationType=Plugin --appVersion="a7eb40b94c1c81eb76b178ba1befdc21823f86fa" --apiKey=${{ secrets.SOOS_API_KEY }} --apiURL=https://api.soos.io/api/ --branchName=${{ github.head_ref || github.ref_name }} --branchURI='${{ github.server_url }}/${{ github.repository }}/tree/${{ github.head_ref || github.ref_name }}' --buildURI='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}' --clientId=${{ secrets.SOOS_CLIENT_ID }} --exportFormat="Sarif" --exportFileType="Json" --logLevel=INFO --onFailure=continue_on_failure --operatingEnvironment=${{ runner.os }} --projectName="test run" --scanMode=baseline http://127.0.0.1:3001"
+
         file=$(find . -name "*.sarif.json" | head -n 1)
         if [ -n "$file" ]; then
           mv "$file" output.sarif.json
