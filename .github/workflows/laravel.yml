@@ -38,4 +38,4 @@ jobs:
         NODE_OPTIONS: --openssl-legacy-provider
       run: npm i ; npm run dev
     - name: curl -i localhost:3001
-      run: npm install -g http-server;npx http-server ;curl -i localhost:3001
+      run: npx http-server ; curl -i localhost:3001

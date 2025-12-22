@@ -24,6 +24,6 @@
         "vue-template-compiler": "^2.6.4"
     },
     "dependencies": {
-        "serve": "^14.2.5"
+        "http-server": "^14.1.1"
     }
 }
