@@ -38,5 +38,9 @@ jobs:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
       run: phpunit
-    - name: localhost test
-      run: npm i & npm run dev
+    - name: npm i
+      run: npm i 
+    - name: npm run dev
+      run: npm run dev
+    - name: curl -i localhost:3001
+      run: curl -i localhost:3001
