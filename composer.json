@@ -8,6 +8,7 @@
     ],
     "license": "MIT",
     "require": {
+        "composer-runtime-api": "^2.2",
         "php": "^7.1.3",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "6.3.0",
