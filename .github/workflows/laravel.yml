@@ -45,9 +45,9 @@ jobs:
         npx http-server -p 3001 -c-1 & npx_server=$!  # Start in background, capture PID
     - name: Run SOOS DAST Analysis + Find and rename SARIF file since it is unique
       run: |
-        docker pull soosio/dast:a7eb40b94c1c81eb76b178ba1befdc21823f86fa
+        docker pull soosio/dast:latest
         chmod -R 777 ${{ github.workspace }}
-        eval "docker -p3001:3001 run -u zap -v ${{ github.workspace }}:/zap/wrk/:rw --rm soosio/dast:a7eb40b94c1c81eb76b178ba1befdc21823f86fa --integrationName=Github --integrationType=Plugin --appVersion="a7eb40b94c1c81eb76b178ba1befdc21823f86fa" --apiKey=${{ secrets.SOOS_API_KEY }} --apiURL=https://api.soos.io/api/ --branchName=${{ github.head_ref || github.ref_name }} --branchURI='${{ github.server_url }}/${{ github.repository }}/tree/${{ github.head_ref || github.ref_name }}' --buildURI='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}' --clientId=${{ secrets.SOOS_CLIENT_ID }} --exportFormat="Sarif" --exportFileType="Json" --logLevel=INFO --onFailure=continue_on_failure --operatingEnvironment=${{ runner.os }} --projectName="test run" --scanMode=baseline http://127.0.0.1:3001"
+        eval "docker -p3001:3001 run -u zap -v ${{ github.workspace }}:/zap/wrk/:rw --rm soosio/dast:latest --integrationName=Github --integrationType=Plugin --appVersion="latest" --apiKey=${{ secrets.SOOS_API_KEY }} --apiURL=https://api.soos.io/api/ --branchName=${{ github.head_ref || github.ref_name }} --branchURI='${{ github.server_url }}/${{ github.repository }}/tree/${{ github.head_ref || github.ref_name }}' --buildURI='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}' --clientId=${{ secrets.SOOS_CLIENT_ID }} --exportFormat="Sarif" --exportFileType="Json" --logLevel=INFO --onFailure=continue_on_failure --operatingEnvironment=${{ runner.os }} --projectName="test run" --scanMode=baseline http://127.0.0.1:3001"
 
         file=$(find . -name "*.sarif.json" | head -n 1)
         if [ -n "$file" ]; then
