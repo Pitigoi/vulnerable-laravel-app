@@ -47,6 +47,7 @@ jobs:
       run: |
         docker pull soosio/dast:latest
         chmod -R 777 ${{ github.workspace }}
+        echo 1
         eval "docker run --net=host -u zap -v ${{ github.workspace }}:/zap/wrk/:rw --rm \
           soosio/dast:latest \
           --integrationName=Github \
@@ -66,6 +67,8 @@ jobs:
           --projectName="test run" \
           --scanMode=baseline \
           http://127.0.0.1:3001"
+
+        echo 2
 
         file=$(find . -name "*.sarif.json" | head -n 1)
         if [ -n "$file" ]; then
