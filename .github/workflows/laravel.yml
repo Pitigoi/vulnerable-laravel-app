@@ -41,6 +41,8 @@ jobs:
     - name: npm i
       run: npm i 
     - name: npm run dev
+      env:
+        NODE_OPTIONS: --openssl-legacy-provider
       run: npm run dev
     - name: curl -i localhost:3001
       run: curl -i localhost:3001
