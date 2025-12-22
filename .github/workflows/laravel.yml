@@ -47,7 +47,25 @@ jobs:
       run: |
         docker pull soosio/dast:latest
         chmod -R 777 ${{ github.workspace }}
-        eval "docker run --net=host -u zap -v ${{ github.workspace }}:/zap/wrk/:rw --rm soosio/dast:latest --integrationName=Github --integrationType=Plugin --appVersion="latest" --apiKey=${{ secrets.SOOS_API_KEY }} --apiURL=https://api.soos.io/api/ --branchName=${{ github.head_ref || github.ref_name }} --branchURI='${{ github.server_url }}/${{ github.repository }}/tree/${{ github.head_ref || github.ref_name }}' --buildURI='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}' --clientId=${{ secrets.SOOS_CLIENT_ID }} --exportFormat="Sarif" --exportFileType="Json" --logLevel=INFO --onFailure=continue_on_failure --operatingEnvironment=${{ runner.os }} --projectName="test run" --scanMode=baseline http://127.0.0.1:3001"
+        eval "docker run --net=host -u zap -v ${{ github.workspace }}:/zap/wrk/:rw --rm \
+          soosio/dast:latest \
+          --integrationName=Github \
+          --integrationType=Plugin \
+          --appVersion="latest" \
+          --apiKey=${{ secrets.SOOS_API_KEY }} \
+          --apiURL=https://api.soos.io/api/ \
+          --branchName=${{ github.head_ref || github.ref_name }} \
+          --branchURI='${{ github.server_url }}/${{ github.repository }}/tree/${{ github.head_ref || github.ref_name }}' \
+          --buildURI='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}' \
+          --clientId=${{ secrets.SOOS_CLIENT_ID }} \
+          --exportFormat="Sarif" \
+          --exportFileType="Json" \
+          --logLevel=INFO \
+          --onFailure=continue_on_failure \
+          --operatingEnvironment=${{ runner.os }} \
+          --projectName="test run" \
+          --scanMode=baseline \
+          http://127.0.0.1:3001"
 
         file=$(find . -name "*.sarif.json" | head -n 1)
         if [ -n "$file" ]; then
