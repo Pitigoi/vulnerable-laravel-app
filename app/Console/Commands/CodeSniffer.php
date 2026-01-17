@@ -3,7 +3,16 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Bartlett\Sarif;
+use Bartlett\Sarif\Definition\Run;
+use Bartlett\Sarif\Definition\Tool;
+use Bartlett\Sarif\Definition\ToolComponent;
+use Bartlett\Sarif\Definition\Result;
+use Bartlett\Sarif\Definition\Message;
+use Bartlett\Sarif\Definition\Location;
+use Bartlett\Sarif\Definition\PhysicalLocation;
+use Bartlett\Sarif\Definition\ArtifactLocation;
+use Bartlett\Sarif\Definition\Region;
+use Bartlett\Sarif\SarifLog;
 
 class CodeSniffer extends Command
 {
@@ -53,13 +62,13 @@ class CodeSniffer extends Command
 
         $checkstyleXml = simplexml_load_file('phpcs-report.xml');
        
-        $run = new Sarif\Definition\Run();
+        $run = new Run();
 
-        $driver = new Sarif\Definition\ToolComponent();
+        $driver = new ToolComponent();
         $driver->setName('PHP_CodeSniffer');
         $driver->setSemanticVersion('3.10.1');  // Adjust to your phpcs version
 
-        $tool = new Sarif\Definition\Tool();
+        $tool = new Tool();
         $tool->setDriver($driver);
 
         $run->setTool($tool);
@@ -67,18 +76,18 @@ class CodeSniffer extends Command
         foreach ($checkstyleXml->file as $file) {
             $fileUri = (string)$file['name'];
             foreach ($file->error as $error) {
-                $result = new Sarif\Definition\Result();
-                $message = new Sarif\Definition\Message();
+                $result = new Result();
+                $message = new Message();
                 $message->setText((string)$error["message"]);
                 $result->setMessage($message);
                 $result->setLevel((string)$error["severity"]);
                 
-                $artifactLocation = new Sarif\Definition\ArtifactLocation();
+                $artifactLocation = new ArtifactLocation();
                 $artifactLocation->setUri($fileUri);
-                $location = new Sarif\Definition\Location();
-                $physicalLocation = new Sarif\Definition\PhysicalLocation();
+                $location = new Location();
+                $physicalLocation = new PhysicalLocation();
                 $physicalLocation->setArtifactLocation($artifactLocation);
-                $region = new Sarif\Definition\Region();
+                $region = new Region();
                 $region->setStartLine((int)$error["line"]);
                 $region->setStartColumn((int)$error["column"]);
                 $physicalLocation->setRegion($region);
@@ -90,7 +99,7 @@ class CodeSniffer extends Command
             }
         }
 
-        $sarif = new Sarif\SarifLog([$run]);
+        $sarif = new SarifLog([$run]);
         $sarif->setVersion('2.1.0');
         file_put_contents('phpcs-report.sarif', json_encode($sarif, JSON_PRETTY_PRINT));
         unlink('phpcs-report.xml');
