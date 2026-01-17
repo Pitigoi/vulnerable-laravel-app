@@ -32,9 +32,7 @@ jobs:
         mkdir -p database
         touch database/database.sqlite
     - name: Run PHP CodeSniffer
-      run: |
-        vendor/bin/phpcs --report=checkstyle --out=phpcs-report.xml .
-        # Convert to SARIF if needed (use tool or script)
+      run: php artisan code:sniffer
     - name: Upload CodeSniffer SARIF
       uses: github/codeql-action/upload-sarif@v3
       with:
