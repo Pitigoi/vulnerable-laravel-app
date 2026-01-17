@@ -19,6 +19,7 @@
         "monolog/monolog": "1.16"
     },
     "require-dev": {
+        "bartlett/sarif-php-sdk": "^2.0.1",
         "beyondcode/laravel-dump-server": "^1.0",
         "filp/whoops": "^2.0",
         "friendsofphp/php-cs-fixer": "*",
