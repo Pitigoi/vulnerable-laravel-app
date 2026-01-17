@@ -31,6 +31,15 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
+    - name: Run PHP CodeSniffer
+      run: |
+        vendor/bin/phpcs --report=checkstyle --out=phpcs-report.xml .
+        # Convert to SARIF if needed (use tool or script)
+    - name: Upload CodeSniffer SARIF
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: phpcs-report.sarif
+
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       env:
         DB_CONNECTION: sqlite
