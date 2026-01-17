@@ -60,6 +60,7 @@ class CodeSniffer extends Command
 
         if(!file_exists('phpcs-report.xml')) return 0;
 
+        print(file_get_contents('composer.lock'));
         $checkstyleXml = simplexml_load_file('phpcs-report.xml');
        
         $run = new Run();
