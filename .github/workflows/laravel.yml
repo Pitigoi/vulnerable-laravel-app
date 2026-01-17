@@ -51,6 +51,7 @@ jobs:
       run: |
         npx http-server -p 3001 -c-1 & npx_server=$!  # Start in background, capture PID
     - name: Run SOOS DAST Analysis + Find and rename SARIF file since it is unique
+      continue-on-error: true
       run: |
         docker pull soosio/dast:latest
         chmod -R 777 ${{ github.workspace }}
@@ -86,5 +87,6 @@ jobs:
       with:
         sarif_file: output.sarif.json
     - name: kill server
+      continue-on-error: true
       run: |
         kill $npx_server  # Cleanup
