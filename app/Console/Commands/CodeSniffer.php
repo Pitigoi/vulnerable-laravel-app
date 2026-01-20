@@ -48,7 +48,7 @@ class CodeSniffer extends Command
     public function handle()
     {
         $paths = [
-            './app', './bootstrap', './database', 
+            './app', './bootstrap', './database',
             './public', './routes', './tests'
         ];
 
