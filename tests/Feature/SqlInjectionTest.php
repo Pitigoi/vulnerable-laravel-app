@@ -14,8 +14,9 @@ class SqlInjectionTest extends TestCase
     public function test_sql_injection_via_sort_parameter()
     {
         // Seed users table with test data
-        \App\Models\User::factory()->create([
-            'username' => 'admin',
+        \App\User::create([
+            'name' => 'admin',
+            'email' => 'admin',
             'password' => 'secretpass'
         ]);
         
@@ -27,7 +28,7 @@ class SqlInjectionTest extends TestCase
         ]);
         
         $response->assertJson(fn (AssertableJson $json) =>
-            $json->has('0.username', 'admin')
+            $json->has('0.name', 'admin')
                  ->has('0.password', 'secretpass')
                  ->etc()
         );
