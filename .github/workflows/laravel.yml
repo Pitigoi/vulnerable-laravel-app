@@ -31,10 +31,21 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/php@master
+      continue-on-error: true # To make sure that SARIF upload gets called
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --sarif-file-output=snyk.sarif
+    - name: Upload result to GitHub Code Scanning
+      uses: github/codeql-action/upload-sarif@v4
+      with:
+        sarif_file: snyk.sarif
     - name: Run PHP CodeSniffer
       run: php artisan code:sniffer
     - name: Upload CodeSniffer SARIF
-      uses: github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@v4
       with:
         sarif_file: phpcs-report.sarif
 
@@ -83,7 +94,7 @@ jobs:
           echo "No SARIF file found" && exit 1
         fi
     - name: Upload SOOS DAST SARIF Report
-      uses: github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@v4
       continue-on-error: true
       with:
         sarif_file: output.sarif.json
