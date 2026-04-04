@@ -53,6 +53,9 @@ jobs:
       with:
         sarif_file: snyk.sarif
 
+    - name: Clean snyk sarif
+      run: rm snyk.sarif
+
     - name: Run PHP CodeSniffer
       run: php artisan code:sniffer
 
