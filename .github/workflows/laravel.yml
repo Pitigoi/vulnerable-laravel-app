@@ -74,7 +74,7 @@ jobs:
 
     - name: start the server
       run: |
-        php -S localhost:3001 & npx_server=$!  # Start in background, capture PID
+        php artisan serve --port=3001 & npx_server=$!  # Start in background, capture PID
 
     - name: Run SOOS DAST Analysis + Find and rename SARIF file since it is unique
       continue-on-error: true
