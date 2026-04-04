@@ -77,7 +77,7 @@ jobs:
 
     - name: start the server
       run: |
-        php artisan serve --port=3001 & npx_server=$!  # Start in background, capture PID
+        php artisan serve --port=3001 & # Start in background
 
     - name: Run SOOS DAST Analysis + Find and rename SARIF file since it is unique
       continue-on-error: true
@@ -121,4 +121,4 @@ jobs:
     - name: kill server
       continue-on-error: true
       run: |
-        kill $npx_server  # Cleanup
+        kill $(ps aux | grep "php artisan serve --port=3001" | grep -v grep | awk '{print $2}') # Cleanup
