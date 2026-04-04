@@ -72,9 +72,9 @@ jobs:
         NODE_OPTIONS: --openssl-legacy-provider
       run: npm i ; npm run dev
 
-    - name: curl -i localhost:3001
+    - name: start the server
       run: |
-        npx http-server -p 3001 -c-1 & npx_server=$!  # Start in background, capture PID
+        php -S localhost:3001 & npx_server=$!  # Start in background, capture PID
 
     - name: Run SOOS DAST Analysis + Find and rename SARIF file since it is unique
       continue-on-error: true
@@ -114,7 +114,7 @@ jobs:
       continue-on-error: true
       with:
         sarif_file: output.sarif.json
-        
+
     - name: kill server
       continue-on-error: true
       run: |
