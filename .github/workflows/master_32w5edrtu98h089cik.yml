@@ -47,12 +47,7 @@ jobs:
         env:
           NODE_OPTIONS: --openssl-legacy-provider
         run: npm i ; npm run prod
-
-      - name: kill server
-        continue-on-error: true
-        run: |
-          kill $(ps aux | grep "php artisan serve --port=3001" | grep -v grep | awk '{print $2}') # Cleanup
-
+        
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
