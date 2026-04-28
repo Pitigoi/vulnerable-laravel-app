@@ -46,7 +46,7 @@ jobs:
       - name: npm i 
         env:
           NODE_OPTIONS: --openssl-legacy-provider
-        run: npm i ; npm run build
+        run: npm i ; npm run prod
 
       - name: kill server
         continue-on-error: true
