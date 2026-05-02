@@ -79,6 +79,12 @@ jobs:
       run: |
         php artisan serve --port=3001 & # Start in background
 
+    - name: ZAP Scan
+      uses: zaproxy/action-full-scan@v0.13.0
+      with:
+        allow_issue_writing: false
+        target: 'http://127.0.0.1:3001'
+
     - name: Run SOOS DAST Analysis + Find and rename SARIF file since it is unique
       continue-on-error: true
       run: |
