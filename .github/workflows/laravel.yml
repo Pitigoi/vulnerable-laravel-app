@@ -83,12 +83,14 @@ jobs:
       uses: zaproxy/action-full-scan@v0.13.0
       with:
         allow_issue_writing: false
-        cmd_options: >
-            -addoninstall reports
-            -config report.sarif.enabled=true
-            -config report.sarif.templatesDir=$(ZAP_HOME)/reports/sarif-json/templates
-            -config report.general.title="ZAP SARIF Report"
+        cmd_options:  "-addoninstall reports -config report.sarif.enabled=true -config report.sarif.templatesDir=$(ZAP_HOME)/reports/sarif-json/templates -config report.general.title=\"ZAP SARIF Report\""
         target: 'http://127.0.0.1:3001'
+
+    #- name: Upload ZAP Scan SARIF Report
+    #  uses: github/codeql-action/upload-sarif@v4
+    #  continue-on-error: true
+    #  with:
+    #    sarif_file: output.sarif.json
 
     - name: Run SOOS DAST Analysis + Find and rename SARIF file since it is unique
       continue-on-error: true
