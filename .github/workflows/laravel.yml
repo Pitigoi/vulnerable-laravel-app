@@ -79,12 +79,18 @@ jobs:
       run: |
         php artisan serve --port=3001 & # Start in background
 
-    - name: ZAP Scan
-      uses: zaproxy/action-full-scan@v0.13.0
+    #- name: ZAP Scan
+    #  uses: zaproxy/action-full-scan@v0.13.0
+    #  with:
+    #    allow_issue_writing: false
+    #    cmd_options:  "-d -z -config report.template=sarif-json"
+    #    target: 'http://127.0.0.1:3001'
+
+    - name: zap automation framework
+      uses: zaproxy/action-af@v0.2.0
       with:
-        allow_issue_writing: false
-        cmd_options:  "-d -z -config report.template=sarif-json"
-        target: 'http://127.0.0.1:3001'
+        plan: plan.yaml
+        
 
     #- name: Upload ZAP Scan SARIF Report
     #  uses: github/codeql-action/upload-sarif@v4

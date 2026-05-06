@@ -1,0 +1,22 @@
+env:
+  contexts:
+    - name: 'Demo'
+      urls:
+        - 'http://127.0.0.1:3001'
+jobs:
+  - name: "spider"
+    type: "spider"
+
+  - name: "activeScan"
+    type: "activeScan"
+
+  #- name: 'baseline-scan'
+  #  type: 'baseline'
+  #  parameters:
+  #    context: 'Demo'
+  
+  - name: 'report'
+    type: 'report'
+    parameters:
+      template: 'sarif-json'
+      reportDir: /zap/wrk/
