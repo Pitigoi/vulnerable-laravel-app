@@ -83,7 +83,7 @@ jobs:
       uses: zaproxy/action-full-scan@v0.13.0
       with:
         allow_issue_writing: false
-        cmd_options:  "-z -config report.template=sarif-json"
+        cmd_options:  "-d -z -config report.template=sarif-json"
         target: 'http://127.0.0.1:3001'
 
     #- name: Upload ZAP Scan SARIF Report
